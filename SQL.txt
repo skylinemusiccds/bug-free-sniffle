@@ -1,0 +1,56 @@
+Create a function for user registration:def register():
+    conn = sqlite3.connect("users.db")
+    cursor = conn.cursor()
+
+    username = input("Enter your username: ")
+    password = getpass.getpass("Enter your password: ")
+
+    cursor.execute("INSERT INTO users (username, password) VALUES (?, ?)", (username, password))
+    conn.commit()
+
+    print("Registration successful!")
+
+    conn.close()Create a function for user authentication:def authenticate():
+    conn = sqlite3.connect("users.db")
+    cursor = conn.cursor()
+
+    username = input("Enter your username: ")
+    password = getpass.getpass("Enter your password: ")
+
+    cursor.execute("SELECT * FROM users WHERE username=? AND password=?", (username, password))
+    user = cursor.fetchone()
+
+    if user:
+        print("Authentication successful!")
+        # Start your chatbot here
+    else:
+        print("Authentication failed. Please try again.")
+
+    conn.close()Create the main part of your program:if __name__ == "__main__":
+    conn = sqlite3.connect("users.db")
+    cursor = conn.cursor()
+
+    # Create the users table if it doesn't exist
+    cursor.execute('''CREATE TABLE IF NOT EXISTS users (
+                    id INTEGER PRIMARY KEY,
+                    username TEXT NOT NULL,
+                    password TEXT NOT NULL
+                )''')
+
+    conn.close()
+
+    while True:
+        print("1. Register")
+        print("2. Authenticate")
+        print("3. Exit")
+
+        choice = input("Enter your choice: ")
+
+        if choice == "1":
+            register()
+        elif choice == "2":
+            authenticate()
+        elif choice == "3":
+            break
+        else:
+            print("Invalid choice. Please select a valid option.")
